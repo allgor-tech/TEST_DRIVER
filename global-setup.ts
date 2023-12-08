@@ -1,18 +1,19 @@
 // global-setup.ts
 import { chromium } from '@playwright/test';
-import LoginSteps from './pageSteps/loginSteps';
+import Selectors from './pageElements/selectors';
 
 async function globalSetup() {
   const browser = await chromium.launch();
   const page = await browser.newPage();
-  const loginSteps = new LoginSteps(page);
   try {
     // Open URL
     console.log("Getting The Login State");
     await page.goto(process.env.URL);
     await page.waitForLoadState("domcontentloaded");
     // Log In
-    await loginSteps.login(process.env.UNAME, process.env.PASS);
+    await page.locator(Selectors.FIELD_UNAME).fill(process.env.UNAME);
+    await page.locator(Selectors.FIELD_PWD).fill(process.env.PASS);
+    await page.locator(Selectors.BTN_LOGIN).click();
     await page.waitForLoadState("domcontentloaded");
     // Storage State
     await page.context().storageState({ path: process.env.STATE_PATH as string });
