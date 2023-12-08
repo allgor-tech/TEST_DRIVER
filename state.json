@@ -1,0 +1,14 @@
+{
+  "cookies": [],
+  "origins": [
+    {
+      "origin": "https://dev.omni-dispatch.com",
+      "localStorage": [
+        {
+          "name": "tms_token",
+          "value": "d17cfe19-304a-423b-9247-c9afd6fbc01f"
+        }
+      ]
+    }
+  ]
+}
