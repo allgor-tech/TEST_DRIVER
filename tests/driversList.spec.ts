@@ -1,15 +1,11 @@
 import { test, expect } from '@playwright/test';
 import Selectors from '../pageElements/selectors';
-import LoginSteps from '../pageSteps/loginSteps';
 
 let webContext
 let page;
-let loginSteps: LoginSteps;
-
 test.beforeEach(async ({ browser }) => {
   webContext = await browser.newContext({ storageState: process.env.STATE_PATH })
   page = await webContext.newPage();
-  loginSteps = new LoginSteps(page);
   // Open URL
   await page.goto(process.env.URL);
   await page.waitForLoadState("domcontentloaded");
