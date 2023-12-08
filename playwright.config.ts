@@ -4,7 +4,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 export default defineConfig({
-  // globalSetup: require.resolve(`./global-setup`),
+  globalSetup: require.resolve(`./global-setup`),
   testDir: './tests',
   /* Run tests in files in parallel */
   fullyParallel: true,

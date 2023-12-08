@@ -1,12 +1,37 @@
 {
-  "cookies": [],
+  "cookies": [
+    {
+      "name": "_ga_DR4WVJL7S9",
+      "value": "GS1.1.1702061970.1.0.1702061970.0.0.0",
+      "domain": ".omni-dispatch.com",
+      "path": "/",
+      "expires": 1736621970.682572,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "_ga",
+      "value": "GA1.1.376965934.1702061971",
+      "domain": ".omni-dispatch.com",
+      "path": "/",
+      "expires": 1736621970.683137,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    }
+  ],
   "origins": [
     {
       "origin": "https://dev.omni-dispatch.com",
       "localStorage": [
         {
           "name": "tms_token",
-          "value": "d17cfe19-304a-423b-9247-c9afd6fbc01f"
+          "value": "a249cf45-967f-4926-8728-71282f82e3e6"
+        },
+        {
+          "name": "_chat_tabs",
+          "value": "[\"n\"]"
         }
       ]
     }

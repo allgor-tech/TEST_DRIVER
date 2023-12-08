@@ -1,27 +1,28 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from '../fixtures/base';
 import Selectors from '../pageElements/selectors';
 import LoginSteps from '../pageSteps/loginSteps';
 
-let page;
-let loginSteps: LoginSteps;
-
-test.beforeEach(async ({ context }) => {
-  page = await context.newPage();
-  loginSteps = new LoginSteps(page);
-  // Open URL
-  await page.goto(process.env.URL);
-  await page.waitForLoadState("domcontentloaded");
+test.use({
+  page: async ({ context }, use) => {
+    const page = await context.newPage();
+    await page.goto(process.env.URL);
+    await page.waitForLoadState("domcontentloaded");
+    await use(page);
+  },
+  loginSteps: async ({ page }, use) => {
+    await use(new LoginSteps(page));
+  }
 });
 
 test.describe.parallel('Positive Test Cases', () => {
-  test('Valid Login', async () => {
+  test('Valid Login', async ({ page, loginSteps }) => {
     await loginSteps.login(process.env.UNAME, process.env.PASS);
     await test.step('URL Validation', async () => {
       await page.waitForURL(`${process.env.URL}/chats`);
     });
   });
   
-  test('Forgot password', async () => {
+  test('Forgot password', async ({ page, loginSteps }) => {
     await test.step('Click Forgot password', async () => {
       await page.getByText('Forgot password').click();
     });
@@ -37,7 +38,7 @@ test.describe.parallel('Positive Test Cases', () => {
     });
   });
 
-  test('Successful Logout', async () => {
+  test('Successful Logout', async ({ page, loginSteps }) => {
     await loginSteps.login(process.env.UNAME, process.env.PASS);
     await test.step('Logging out', async () => {
       await page.locator(Selectors.BTN_USER_MENU).click();
@@ -50,32 +51,32 @@ test.describe.parallel('Positive Test Cases', () => {
 });
 
 test.describe.parallel('Negative Test Cases', () => {
-  test('Invalid Username', async () => {
+  test('Invalid Username', async ({ loginSteps }) => {
     await loginSteps.login(`fake${process.env.UNAME}`, process.env.PASS);
     await loginSteps.confirmLoginError();
   });
 
-  test('Invalid Password', async () => {
+  test('Invalid Password', async ({ loginSteps }) => {
     await loginSteps.login(process.env.UNAME, `fake${process.env.PASS}`);
     await loginSteps.confirmLoginError();
   });
 
-  test('Empty Username', async () => {
+  test('Empty Username', async ({ loginSteps }) => {
     await loginSteps.login(``, `fake${process.env.PASS}`);
     await loginSteps.confirmLoginError();
   });
 
-  test('Empty Password', async () => {
+  test('Empty Password', async ({ loginSteps }) => {
     await loginSteps.login(process.env.UNAME, ``);
     await loginSteps.confirmLoginError();
   });
 
-  test('Incorrect Credentials', async () => {
+  test('Incorrect Credentials', async ({ loginSteps }) => {
     await loginSteps.login(`fake${process.env.UNAME}`, `fake${process.env.PASS}`);
     await loginSteps.confirmLoginError();
   });
 
-  test('SQL Injection Attempt', async () => {
+  test('SQL Injection Attempt', async ({ loginSteps }) => {
     await loginSteps.login(`' OR 1=1-- `, `foo`);
     await loginSteps.confirmLoginError();
   });
